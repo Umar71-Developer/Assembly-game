@@ -1,0 +1,44 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    margin: 0;
+    font-family: "Hanken Grotesk", sans-serif;
+    background-color: #262626;
+    color: #F9F4DA;
+    padding: 2.4em;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+header{
+    text-align: center;
+}
+
+header > h1{
+    font-size: 1.8rem;
+    font-weight: 500;
+    }
+header > p{
+    font-size: 1.2rem;
+    /* max-width: 350px; */
+    color: #8E8E8E;
+}
+.winner-text{
+    width: 27.5rem;
+    height: 5.3rem;
+    background-color: #10A95B;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 6px;
+}
+.winner-text>h2{
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 500;
+}
+.winner-text>p{
+    margin: 5px;
+    font-size: 1.5rem;
+}
