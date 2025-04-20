@@ -29,12 +29,12 @@ header > p{
 .winner-text{
     margin-inline: auto;
     width: 27.5rem;
-    /* height: 5.3rem; */
+    height: 5.3rem;
     max-width: 400px;
-    
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     border-radius: 6px;
 }
 .winner-text>h2{
@@ -52,6 +52,14 @@ section.winner-text.loose{
 }
 section.winner-text.won{
     background-color: #10A95B;
+}
+section.winner-text.farewell {
+    background-color: #7A5EA7;
+    border: 1px dashed #323232;
+}
+section.winner-text > p.farewell-message {
+    font-style: italic;
+    font-weight: 400;
 }
 section.language-chips{
     margin-inline: auto;
@@ -116,6 +124,10 @@ section.keyboard >button{
     border: 1px solid #D7D7D7;
     border-radius: 3px;
     cursor: pointer;
+}
+section.keyboard > button:disabled{
+    cursor: not-allowed;
+    opacity: 0.6
 }
 section.keyboard > button.correct {
     background-color: #10A95B;

@@ -1,7 +1,8 @@
 import  { useState } from 'react'
 import { languages } from "./languages"
 import clsx from 'clsx';
- 
+import { getFarewellText } from "./utils"
+  
 function AssemblyEndGame() {
   //state values
   const [currentWord , setCurrentWord] = useState("react")
@@ -12,11 +13,14 @@ function AssemblyEndGame() {
   const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
   const wrongguessedLetters = guessedWord.filter((letter) => !currentWord.includes(letter)).length
-  console.log(wrongguessedLetters)
+  
 
   const isGameWon = currentWord.split("").every((letter) => guessedWord.includes(letter));
   const isGameLost = wrongguessedLetters >= languages.length -1 ;
   const isGameOver = isGameWon || isGameLost;
+  const lastGuessedletter = guessedWord[guessedWord.length -1]
+  const lastIncorrectLetter = lastGuessedletter && !currentWord.includes(lastGuessedletter)
+  console.log(lastIncorrectLetter)
 
    function addToKeyboard(letter) {
       setGuessedWord(prevLetter => {
@@ -38,10 +42,11 @@ function AssemblyEndGame() {
       const isWrong = isGuessed && !currentWord.includes(letter)
       const className = clsx({
         correct : iscorrect,
-        wrong : isWrong
+        wrong : isWrong,
+        
       })
       return(
-        <button onClick={() => addToKeyboard(letter)} key={index} className={className}>{letter.toUpperCase()}</button>
+        <button onClick={() => addToKeyboard(letter)} disabled={isGameOver} key={index} className={className}>{letter.toUpperCase()}</button>
       )
    })
 
@@ -60,12 +65,14 @@ function AssemblyEndGame() {
 
   const gameStatusClass = clsx("winner-text",
     {won : isGameWon,
-    loose : isGameLost}
+    loose : isGameLost,
+    farewell: !isGameOver && lastIncorrectLetter  
+  }
   )
 
   function renderGameStatus() {
-    if (!isGameOver) {
-        return null
+    if (!isGameOver && lastIncorrectLetter) {
+        return <p className='farewell-message'>{getFarewellText(languages[lastIncorrectLetter -1].name)}</p>
     }
 
     if (isGameWon) {
@@ -75,13 +82,16 @@ function AssemblyEndGame() {
                 <p>Well done! 🎉</p>
             </>
         )
-    } else {
+    } 
+     if(isGameLost){
         return (
             <>
                 <h2>Game over!</h2>
                 <p>You lose! Better start learning Assembly 😭</p>
             </>
         )
+    }else{
+      return null
     }
 }
 
