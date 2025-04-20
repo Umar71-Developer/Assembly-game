@@ -10,8 +10,9 @@ body{
     height: 100vh;
     display: flex;
     justify-content: center;
-}
+    }
 header{
+    margin-inline: auto;
     text-align: center;
     max-width: 400px;
 }
@@ -26,10 +27,11 @@ header > p{
     color: #8E8E8E;
 }
 .winner-text{
+    margin-inline: auto;
     width: 27.5rem;
-    height: 5.3rem;
+    /* height: 5.3rem; */
     max-width: 400px;
-    background-color: #10A95B;
+    
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -41,8 +43,15 @@ header > p{
     font-weight: 500;
 }
 .winner-text>p{
-    margin: 5px;
-    font-size: 1.5rem;
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+section.winner-text.loose{
+    background-color: #BA2A2A;
+}
+section.winner-text.won{
+    background-color: #10A95B;
 }
 section.language-chips{
     margin-inline: auto;
@@ -55,8 +64,26 @@ section.language-chips{
     margin-bottom: 2.5rem;
 }
 span.chip{
-    padding: 5px;
+    border-radius: 3px;
+    padding: 4.5px;
+    position: relative;
 }
+
+/* Dimmed overlay with skull on "lost" languages */
+span.chip.lost::before {
+    content: "💀";
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    font-size: 0.85rem;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
 section.whole-letter{
     display: flex;
     justify-content: center;
@@ -75,6 +102,7 @@ section.whole-letter>span{
 }
 section.keyboard{
     max-width: 450px;
+    /* background-color: red; */
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
