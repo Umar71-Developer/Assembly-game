@@ -1,11 +1,12 @@
 import  { useState } from 'react'
 import { languages } from "./languages"
 import clsx from 'clsx';
-import { getFarewellText } from "./utils"
+import { getFarewellText , getRandomWord } from "./utils"
+import Confetti from 'react-confetti'
   
 function AssemblyEndGame() {
   //state values
-  const [currentWord , setCurrentWord] = useState("react")
+  const [currentWord , setCurrentWord] = useState(() => getRandomWord())
   const [guessedWord , setGuessedWord] = useState([])
 
   
@@ -14,9 +15,9 @@ function AssemblyEndGame() {
 
   const wrongguessedLetters = guessedWord.filter((letter) => !currentWord.includes(letter)).length
   
-
+  const numGuessesLeft = languages.length - 1
   const isGameWon = currentWord.split("").every((letter) => guessedWord.includes(letter));
-  const isGameLost = wrongguessedLetters >= languages.length -1 ;
+  const isGameLost = wrongguessedLetters >= numGuessesLeft ;
   const isGameOver = isGameWon || isGameLost;
   const lastGuessedletter = guessedWord[guessedWord.length -1]
   const lastIncorrectLetter = lastGuessedletter && !currentWord.includes(lastGuessedletter)
@@ -29,9 +30,12 @@ function AssemblyEndGame() {
       )
    }
    const word = currentWord.split("").map((letter,index) => {
-      
+    const currentRevealLetter = isGameLost || guessedWord.includes(letter)
+      const revealClass = clsx(
+        isGameLost && !guessedWord.includes(letter) && "missed-letters"
+      )
       return(
-      <span key={index} className='letter'>{guessedWord.includes(letter) ?letter.toUpperCase() : ""}</span>
+      <span key={index} className={revealClass}>{currentRevealLetter ?letter.toUpperCase() : ""}</span>
       )
    })
   
@@ -94,9 +98,19 @@ function AssemblyEndGame() {
       return null
     }
 }
+function startNewGame() {
+  setCurrentWord(getRandomWord())
+  setGuessedWord([])
+}
 
   return (
     <main>
+      {
+        isGameWon && <Confetti
+        recycle = {false}
+        numberOfPieces={1000}
+        />
+      }
       <header>
       <h1>Assembly Endgame</h1>
       <p>Guess the word in under 8 attempts to keep the programming world safe from Assembly!</p>
@@ -107,9 +121,27 @@ function AssemblyEndGame() {
       <section className='language-chips'>
       {languageElements}
       </section>
+                                     {/* Combined visually-hidden aria-live region for status updates */}
+       <section 
+                className="sr-only" 
+                aria-live="polite" 
+                role="status"
+            >
+                <p>
+                    {currentWord.includes(lastGuessedletter) ? 
+                        `Correct! The letter ${lastGuessedletter} is in the word.` : 
+                        `Sorry, the letter ${lastGuessedletter} is not in the word.`
+                    }
+                    You have {numGuessesLeft} attempts left.
+                </p>
+                <p>Current word: {currentWord.split("").map(letter => 
+                guessedWord.includes(letter) ? letter + "." : "blank.")
+                .join(" ")}</p>
+            
+            </section>
       <section className='whole-letter'>{word}</section>
       <section className='keyboard'>{keyboardElements}</section>
-      {isGameOver && <button className="new-game">New Game</button>}
+      {isGameOver && <button className="new-game" onClick={startNewGame}>New Game</button>}
     </main>
   )
 }
